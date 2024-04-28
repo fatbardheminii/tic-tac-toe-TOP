@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic-Tac-Toe</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="game-mode hide">
+      <h1>TIC TAC TOE</h1>
+      <div class="main-container">
+        <div class="player-data">
+          <div class="first-player">
+            <h3>Player 1:
+              <p class="pl-one-mark"></p>
+            </h3>
+            <p class="pl-one-name">Hello</p>
+            <p class="pl-one-score">0</p>
+          </div>
+          <div class="second-player">
+            <h3>Player 2:
+              <p class="pl-two-mark"></p>
+            </h3>
+            <p class="pl-two-name">Hi there</p>
+            <p class="pl-two-score">0</p>
+          </div>
+        </div>
+        <div class="turn">
+          <p class="turn-para"></p>
+        </div>
+        <div class="board x">
+          <div class="cell x"></div>
+          <div class="cell circle"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+          <div class="cell"></div>
+        </div>
+        <div class="buttons-div">
+          <button class="reset">Reset</button>
+          <button class="new-game">New Game</button>
+        </div>
+      </div>
+      <footer>
+        <h3>Copyright F.Emini</h3>
+      </footer>
+    </div>
+    <div class="winner-msg">
+      X Wins
+      <div class="buttons-div">
+        <button>Reset</button>
+        <button>Next Round</button>
+      </div>
+    </div>
+    <div class="choose-mode show">
+      <form action="" id="form">
+        <label for="2-players vs-computer" name="game-mode"
+          >Choose game mode:</label
+        >
+        <br />
+        <div class="2-players-mode">
+          <input
+            type="radio"
+            id="two-players"
+            value="2-players"
+            name="game-mode"
+            required
+          />
+          <label for="two-players">2 Players</label>
+        </div>
+        <div class="vs-computer">
+          <input
+            type="radio"
+            id="vs-computer"
+            value="vs-computer"
+            name="game-mode"
+            required
+          />
+          <label for="vs-computer">VS Computer</label>
+        </div>
+        <label for="x-mark circle-mark" name="mark"
+          >Choose mark for <br />
+          player 1:</label
+        >
+        <div class="choose-mark">
+          <div class="x-div">
+            <input
+              type="radio"
+              id="x-mark"
+              value="x-mark"
+              name="mark"
+              required
+            />
+            <label for="x-mark">X</label>
+          </div>
+          <div class="circle-div">
+            <input
+              type="radio"
+              id="circle-mark"
+              value="circle-mark"
+              name="mark"
+              required
+            />
+            <label for="circle-mark">O</label> <br />
+          </div>
+        </div>
+
+        <label for="pl-one-name">Player One name:</label> <br />
+        <input
+          type="name"
+          id="pl-one-name"
+          name="pl-one-name"
+          placeholder="P1"
+        />
+        <br />
+        <label for="pl-two-name">Player Two name:</label> <br />
+        <input
+          type="name"
+          id="pl-two-name"
+          name="pl-two-name"
+          placeholder="P2"
+        />
+        <br />
+        <button type="submit" id="submit-btn">Start</button>
+      </form>
+    </div>
+
+    <script src="main.js"></script>
+  </body>
+</html>

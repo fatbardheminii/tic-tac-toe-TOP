@@ -1,0 +1,276 @@
+/*General selectors*/
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  font-size: 18px;
+  background-color: #FFF6E9;
+}
+
+/*Game-mode div */
+.game-mode {
+  background-color: #EAD7BB;
+  width: clamp(320px, 50%, 100%);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.game-mode.hide {
+  display: none;
+}
+
+h1 {
+  margin-top: 1rem;
+}
+
+.player-data {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.first-player *,
+.second-player * {
+  margin: 0.75rem;
+}
+
+.pl-one-score,
+.pl-two-score {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.pl-one-mark,
+.pl-two-mark {
+  color: red;
+  font-size: 2rem;
+}
+
+.buttons-div {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.board {
+  display: grid;
+  width: 300px;
+  aspect-ratio: 1;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin: 2rem;
+  padding: 0.5rem;
+  background-color: #00000050;
+}
+
+.cell {
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.cell.x,
+.cell.circle {
+  cursor: not-allowed;
+}
+
+/*X Mark */
+/*hover on cell show X or Circle lightgrey*/
+.board.x .cell:not(.x):not(.circle):hover::before,
+.board.x .cell:not(.x):not(.circle):hover::after,
+.board.circle .cell:not(.x):not(.circle):hover::before,
+.board.circle .cell:not(.x):not(.circle):hover::after {
+  background-color: lightgrey;
+}
+
+.cell.x::before,
+.cell.x::after,
+.cell.circle::before,
+.cell.circle::after {
+  background-color: #000;
+}
+/*Draw X via pseudo elements*/
+.cell.x::before,
+.cell.x::after,
+.board.x .cell:not(.x):not(.circle):hover::before,
+.board.x .cell:not(.x):not(.circle):hover::after {
+  display: block;
+  content: "";
+  width: 15px;
+  height: 75%;
+  position: absolute;
+}
+
+.cell.x::before,
+.board.x .cell:not(.x):not(.circle):hover::before {
+  transform: rotate(45deg);
+}
+
+.cell.x::after,
+.board.x .cell:not(.x):not(.circle):hover::after {
+  transform: rotate(-45deg);
+}
+
+/* CIRCLE Mark */
+.cell.circle::before,
+.board.circle .cell:not(.x):not(.circle):hover::before {
+  display: block;
+  content: "";
+  width: 75%;
+  height: 75%;
+  position: absolute;
+  border-radius: 50%;
+}
+
+.cell.circle::after,
+.board.circle .cell:not(.x):not(.circle):hover::after {
+  display: block;
+  content: "";
+  background-color: #fff;
+  width: 50%;
+  height: 50%;
+  position: absolute;
+  border-radius: 50%;
+}
+
+button {
+  padding: 0.25rem 1rem;
+  margin: 1rem 2rem;
+  border-radius: 5px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  background-color: #9EC8B9;
+  border: none;
+}
+
+button:hover {
+  color: #fff;
+  transform: scaleX(1.05);
+  transition: all ease-in-out .4s;
+}
+
+footer {
+  margin-bottom: 0.5rem;
+}
+
+/*Choose mode div*/
+
+.choose-mode {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #f0ebe3;
+  color: #000;
+  font-size: 1.75rem;
+  background-image: url(images/tic-tac-toe.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.choose-mode.show {
+  display: flex;
+}
+
+.choose-mark {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+form {
+  border-radius: 15px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  width: 320px;
+  height: auto;
+  text-align: left;
+  flex-wrap: wrap;
+  padding: 1rem;
+  background-color: #f0ebe3;
+}
+
+form > * {
+  width: 100%;
+}
+
+form button {
+  margin: 0;
+}
+
+input[type="radio"] {
+  margin: 1rem;
+}
+
+input[type="name"] {
+  height: 2rem;
+  padding-left: 0.5rem;
+  font-size: 1.5rem;
+  border-radius: 5px;
+}
+
+label[name="game-mode"],
+label[name="mark"] {
+  font-weight: bold;
+}
+
+/*winner-msg */
+.winner-msg {
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
+  flex-direction: column;
+  color: #fff;
+}
+
+.winner-msg .show {
+  display: flex;
+}
+
+.winner-msg button {
+  font-size: 2rem;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.winner-msg button:hover {
+  background-color: #000;
+  color: #fff;
+  border: 1px solid white;
+}
