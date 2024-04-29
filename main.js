@@ -1,3 +1,32 @@
+//store important variables inside object and access them everywhere 
+const sharedVariables = {
+  //game mode variables 
+  board : document.querySelector(".board"),
+  cells : document.querySelectorAll(".cell"),
+  gameMode : document.querySelector(".game-mode"),
+  turnMessage: document.querySelector('.turn-para'),
+  chooseMode : document.querySelector(".choose-mode"),
+  plOneNamePara : document.querySelector(".pl-one-name"),
+  plTwoNamePara : document.querySelector(".pl-two-name"),
+  plOneMarkPara : document.querySelector(".pl-one-mark"),
+  plTwoMarkPara : document.querySelector(".pl-two-mark"),
+  //form variables
+  twoPlayersMode : document.querySelector("#two-players"),
+  vsComputerMode : document.querySelector("#vs-computer"),
+  xMarkInput : document.querySelector("#x-mark"),
+  circleMarkInput : document.querySelector("#circle-mark"),
+  plOneNameInput : document.querySelector("#pl-one-name"),
+  plTwoNameInput : document.querySelector("#pl-two-name"),
+  //buttons
+  resetWhilePlayingBtn : document.querySelector("#reset-while-playing"),
+  newGameBtn : document.querySelector("#new-game"),
+  resetAfterResultBtn : document.querySelector("#reset-after-result"),
+  nextRoundBtn : document.querySelector("#next-round"),
+  //winner section variables
+  winnerSection : document.querySelector(".winner-section"),
+  winnerMsg : document.querySelector(".winner-msg"),
+};
+
 const Player = (name, mark, score) => {
   this.name = name;
   this.mark = mark;
@@ -14,37 +43,24 @@ const Player = (name, mark, score) => {
   return { getName, getMark, getScore };
 };
 
-(function chooseGameMode() {
-  //variables
-  const gameMode = document.querySelector(".game-mode");
-  const board = document.querySelector(".board");
-  const chooseMode = document.querySelector(".choose-mode");
-  const plOneNamePara = document.querySelector(".pl-one-name");
-  const plTwoNamePara = document.querySelector(".pl-two-name");
-  const plOneMarkPara = document.querySelector(".pl-one-mark");
-  const plTwoMarkPara = document.querySelector(".pl-two-mark");
+const sharedData = {};
 
-  //form variables
-  const twoPlayersMode = document.querySelector("#two-players");
-  const vsComputerMode = document.querySelector("#vs-computer");
-  const xMarkInput = document.querySelector("#x-mark");
-  const circleMarkInput = document.querySelector("#circle-mark");
-  const plOneNameInput = document.querySelector("#pl-one-name");
-  const plTwoNameInput = document.querySelector("#pl-two-name");
+(function chooseGameMode() {
+  const xChecked = sharedVariables.xMarkInput.checked ? "X" : "O";
 
   const setName = (() => {
     setPlOneName = (plOneName) => {
-      plOneNameInput.value
-        ? ((plOneNamePara.innerHTML = plOneNameInput.value),
-          (plOneName = plOneNameInput.value))
-        : ((plOneNamePara.innerHTML = "P1"), (plOneName = "P1"));
+      sharedVariables.plOneNameInput.value
+        ? ((sharedVariables.plOneNamePara.innerHTML = sharedVariables.plOneNameInput.value),
+          (plOneName = sharedVariables.plOneNameInput.value))
+        : ((sharedVariables.plOneNamePara.innerHTML = "P1"), (plOneName = "P1"));
       return plOneName;
     };
     setPlTwoName = (plTwoName) => {
-      plTwoNameInput.value
-        ? ((plTwoNamePara.innerHTML = plTwoNameInput.value),
-          (plTwoName = plTwoNameInput.value))
-        : ((plTwoNamePara.innerHTML = "P2"), (plTwoName = "P2"));
+      sharedVariables.plTwoNameInput.value
+        ? ((sharedVariables.plTwoNamePara.innerHTML = sharedVariables.plTwoNameInput.value),
+          (plTwoName = sharedVariables.plTwoNameInput.value))
+        : ((sharedVariables.plTwoNamePara.innerHTML = "P2"), (plTwoName = "P2"));
       return plTwoName;
     };
     return { setPlOneName, setPlTwoName };
@@ -52,28 +68,30 @@ const Player = (name, mark, score) => {
 
   const setMark = (() => {
     setPlOneMark = (plOneMark) => {
-      if (xMarkInput.checked) {
-        board.classList.add("x");
-        plOneMarkPara.innerHTML = "X";
-        plOneMark = "X";
-      } else if (circleMarkInput.checked) {
-        board.classList.add("circle");
-        plOneMarkPara.innerHTML = "O";
-        plOneMark = "O";
+      if (sharedVariables.xMarkInput.checked) {
+        sharedVariables.board.classList.add("x");
+        sharedVariables.plOneMarkPara.innerHTML = "X";
+        sharedVariables.turnMessage.textContent = `X 's turn to play`;
+        plOneMark = "x";
+      } else if (sharedVariables.circleMarkInput.checked) {
+        sharedVariables.board.classList.add("circle");
+        sharedVariables.plOneMarkPara.innerHTML = "O";
+        sharedVariables.turnMessage.textContent = `O 's turn to play`;
+        plOneMark = "circle";
       }
-      return {plOneMark};
+      return { plOneMark };
     };
     setPlTwoMark = (plTwoMark) => {
-      if (xMarkInput.checked) {
-        board.classList.add("x");
-        plTwoMarkPara.innerHTML = "O";
-        plTwoMark = "O";
-      } else if (circleMarkInput.checked) {
-        board.classList.add("circle");
-        plTwoMarkPara.innerHTML = "X";
-        plTwoMark = "X";
+      if (sharedVariables.xMarkInput.checked) {
+        sharedVariables.board.classList.add("x");
+        sharedVariables.plTwoMarkPara.innerHTML = "O";
+        plTwoMark = "circle";
+      } else if (sharedVariables.circleMarkInput.checked) {
+        sharedVariables.board.classList.add("circle");
+        sharedVariables.plTwoMarkPara.innerHTML = "X";
+        plTwoMark = "x";
       }
-      return {plTwoMark};
+      return { plTwoMark };
     };
     return { setPlOneMark, setPlTwoMark };
   })();
@@ -85,57 +103,175 @@ const Player = (name, mark, score) => {
     }
     event.preventDefault();
 
-    chooseMode.classList.toggle("show");
-    gameMode.classList.toggle("hide");
+    sharedVariables.chooseMode.classList.toggle("show");
+    sharedVariables.gameMode.classList.toggle("hide");
 
-    setName.setPlOneName(plOneNameInput.value);
-    setName.setPlTwoName(plTwoNameInput.value);
+    sharedData.givenNameP1 = setName.setPlOneName(sharedVariables.plOneNameInput.value);
+    sharedData.givenNameP2 = setName.setPlTwoName(sharedVariables.plTwoNameInput.value);
 
-    const xChecked = xMarkInput.checked ? "X" : "O";
-    setMark.setPlOneMark(xChecked);
-    setMark.setPlTwoMark(xChecked);
+    sharedData.givenMarkP1 = setMark.setPlOneMark(xChecked);
+    sharedData.givenMarkP2 = setMark.setPlTwoMark(xChecked);
+    console.log(sharedData.givenMarkP1);
+    console.log(sharedData.givenMarkP2);
+    
 
-    if (vsComputerMode.checked) {
-      plTwoNamePara.innerHTML = "Computer";
+    if (sharedVariables.vsComputerMode.checked) {
+      sharedVariables.plTwoNamePara.innerHTML = "Computer";
     }
 
     form.reset();
+    gameController();
   }
   const formEl = document.querySelector("form");
   formEl.addEventListener("submit", handleFormSubmit);
   //when vsComputer chosen disable second input and add pl2 name Computer
   handleGameMode = () => {
-    if (vsComputerMode.checked) {
-      plTwoNameInput.value = "Computer";
-      plTwoNameInput.disabled = true;
-    } else if (twoPlayersMode.checked) {
-      plTwoNameInput.value = "";
-      plTwoNameInput.disabled = false;
+    if (sharedVariables.vsComputerMode.checked) {
+      sharedVariables.plTwoNameInput.value = "Computer";
+      sharedVariables.plTwoNameInput.disabled = true;
+    } else if (sharedVariables.twoPlayersMode.checked) {
+      sharedVariables.plTwoNameInput.value = "";
+      sharedVariables.plTwoNameInput.disabled = false;
     }
   };
-  vsComputerMode.addEventListener("change", handleGameMode);
-  twoPlayersMode.addEventListener("change", handleGameMode);
-  return {setName, setMark}
+  sharedVariables.vsComputerMode.addEventListener("change", handleGameMode);
+  sharedVariables.twoPlayersMode.addEventListener("change", handleGameMode);
+  return { setName, setMark, handleFormSubmit };
 })();
 
 const gameBoard = (() => {
-  const board = ["", "", "", "", "", "", "", "", ""];
+  const boardArr = ["", "", "", "", "", "", "", "", ""];
 
   const setCell = (index, mark) => {
-    if (index > board.length) return;
-    board[index] = mark;
+    if (index > boardArr.length) return;
+    boardArr[index] = mark;
   };
 
   const getCell = (index) => {
-    if (index > board.length) return;
-    return board[index];
+    if (index > boardArr.length) return;
+    return boardArr[index];
   };
 
   const reset = () => {
-    for (let i = 0; i < board.length; i++) {
-      board[i] = "";
+    for (let i = 0; i < boardArr.length; i++) {
+      boardArr[i] = "";
     }
   };
 
   return { setCell, getCell, reset };
 })();
+
+const displayController = (() => {
+  let move = 1;
+  const getCurrentMark = () => {
+    return move % 2 === 1
+      ? sharedData.givenMarkP1.plOneMark
+      : sharedData.givenMarkP2.plTwoMark;
+  };
+
+  sharedVariables.cells.forEach((cell) => {
+    cell.addEventListener("click", handleCellClick, { once: true });
+  });
+
+  function handleCellClick(e) {
+    //call updateGameBoard, PlayRound, setTurn....
+    if (
+      e.target.classList.contains("x") ||
+      e.target.classList.contains(".circle")
+    )
+      return;
+    e.target.classList.add(getCurrentMark());
+    move++;
+    console.log(move)
+    setTurn();
+    activeMarkHover();
+    checkDraw();
+  }
+
+  const checkDraw = () => {
+    setTimeout(function () {
+      if (move === 10) {
+        sharedVariables.winnerSection.classList.add("show");
+        sharedVariables.winnerMsg.textContent = `It's a DRAW!`;
+      }
+    }, 3000);
+  };
+
+  const setTurn = () => {
+    if (getCurrentMark() === "circle") {
+      sharedVariables.turnMessage.textContent = `O 's turn to play`;
+    } else {
+      sharedVariables.turnMessage.textContent = `X 's turn to play`;
+    }
+  };
+
+  const activeMarkHover = () => {
+    sharedVariables.board.classList.toggle("x");
+    sharedVariables.board.classList.toggle("circle");
+  }
+
+  const setResultMessage = (winner) => {
+    if (winner === "Draw") {
+      sharedVariables.winnerSection.classList.add("show");
+      setMessageElement("It's a DRAW!");
+    } else {
+      sharedVariables.winnerSection.classList.add("show");
+      setMessageElement(`Player: ${winner} has won!`);
+    }
+  };
+
+  const setMessageElement = (message) => {
+    sharedVariables.winnerMsg.textContent = message;
+  };
+
+  const updateGameboard = () => {
+    for (let i = 0; i < sharedVariables.cells.length; i++) {
+      sharedVariables.cells[i].textContent = gameBoard.getCell(i);
+    }
+  };
+})();
+
+const gameController = () => {
+  const player1 = Player(
+    sharedData.givenNameP1,
+    sharedData.givenMarkP1.plOneMark,
+    0
+  );
+  const player2 = Player(
+    sharedData.givenNameP2,
+    sharedData.givenMarkP2.plTwoMark,
+    0
+  );
+  let move = 1;
+  let isOver = false;
+  
+   const playRound = (fieldIndex) => {
+     gameBoard.setCell(fieldIndex, getCurrentMark());
+     if (checkWinner(fieldIndex)) {
+       displayController.setResultMessage(getCurrentMark());
+       isOver = true;
+       return;
+     }
+     if (move === 10) {
+       displayController.setResultMessage("Draw");
+       isOver = true;
+       return;
+     }
+     move++;
+     displayController.setMessageElement(
+       `Player ${getCurrentMark()}'s turn`
+     );
+   };
+
+
+   const getIsOver = () => {
+     return isOver;
+   };
+
+   const reset = () => {
+     move = 1;
+     isOver = false;
+   };
+
+   return { playRound, getIsOver, reset };
+}

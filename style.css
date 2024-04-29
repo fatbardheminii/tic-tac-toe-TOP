@@ -70,6 +70,16 @@ h1 {
   align-items: center;
 }
 
+.turn-para {
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  color: red;
+}
+
+.turn-para::first-letter {
+  font-size: 2rem;
+}
+
 .board {
   display: grid;
   width: 300px;
@@ -243,8 +253,8 @@ label[name="mark"] {
   font-weight: bold;
 }
 
-/*winner-msg */
-.winner-msg {
+/*winner-section */
+.winner-section {
   display: none;
   position: fixed;
   top: 0;
@@ -259,17 +269,17 @@ label[name="mark"] {
   color: #fff;
 }
 
-.winner-msg .show {
+.winner-section.show {
   display: flex;
 }
 
-.winner-msg button {
+.winner-section button {
   font-size: 2rem;
   background-color: #fff;
   cursor: pointer;
 }
 
-.winner-msg button:hover {
+.winner-section button:hover {
   background-color: #000;
   color: #fff;
   border: 1px solid white;
