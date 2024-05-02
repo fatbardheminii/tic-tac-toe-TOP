@@ -13,6 +13,7 @@ const sharedVariables = {
   plTwoMarkPara: document.querySelector(".pl-two-mark"),
   plOneScore: document.querySelector(".pl-one-score"),
   plTwoScore: document.querySelector(".pl-two-score"),
+  roundNum : document.querySelector('.round-num'),
   //form variables
   twoPlayersMode: document.querySelector("#two-players"),
   vsComputerMode: document.querySelector("#vs-computer"),
@@ -125,7 +126,6 @@ const sharedData = {};
     }
 
     form.reset();
-    // gameController();
     gameController.createPlayers();
   }
   const formEl = document.querySelector("form");
@@ -180,7 +180,6 @@ const displayController = (() => {
     )
       return;
     gameController.playMove(fieldIndex);
-    activeMarkHover();
   }
 
   const newGame = () => {
@@ -188,19 +187,16 @@ const displayController = (() => {
     gameController.reset();
     removeMarks();
     gameController.setTurn();
-    // gameController.player1.score = 0;
-    // console.log(gameController.player1.score);
     sharedVariables.plOneScore.textContent = 0;
-    // gameController.player2.score = 0;
-    // console.log(gameController.player2.score);
     sharedVariables.plTwoScore.textContent = 0;
+    sharedVariables.roundNum.textContent = 1;
   };
 
   sharedVariables.newGameBtn.addEventListener('click', newGame);
 
-  const activeMarkHover = () => {
-    sharedVariables.board.classList.toggle("x");
-    sharedVariables.board.classList.toggle("circle");
+  const activeMarkHover = (currentMark) => {
+    sharedVariables.board.classList.remove("x", "circle");
+    sharedVariables.board.classList.add(currentMark);
   };
 
   const setResultMessage = (winner) => {
@@ -233,7 +229,7 @@ const displayController = (() => {
   }
   sharedVariables.nextRoundBtn.addEventListener('click', nextRound);
 
-  return { setMessageElement, setResultMessage };
+  return { setMessageElement, setResultMessage, activeMarkHover };
 })();
 
 const gameController = (() => {
@@ -250,7 +246,7 @@ const gameController = (() => {
       0
     );
   };
-
+  let round = 1;
   let move = 1;
   let isOver = false;
 
@@ -267,12 +263,18 @@ const gameController = (() => {
         displayController.setResultMessage(`${player2.name}(${player2.mark})`);
       }
       isOver = true;
+      round++;
+      sharedVariables.roundNum.textContent = round;
+      console.log(`Round: ${round}`);
       return;
     }
     if (move === 9) {
       setTimeout(function () {
         displayController.setResultMessage("Draw");
         isOver = true;
+        round++;
+        sharedVariables.roundNum.textContent = round;
+        console.log(`Round: ${round}`);
         return;
       }, 1000);
     }
@@ -281,9 +283,15 @@ const gameController = (() => {
   };
 
   const getCurrentMark = () => {
-    return move % 2 === 1
-      ? sharedData.givenMarkP1.plOneMark
-      : sharedData.givenMarkP2.plTwoMark;
+    if(round % 2 === 1) {
+      return move % 2 === 1
+        ? sharedData.givenMarkP1.plOneMark
+        : sharedData.givenMarkP2.plTwoMark;
+    } else {
+      return move % 2 === 1
+        ? sharedData.givenMarkP2.plTwoMark
+        : sharedData.givenMarkP1.plOneMark;
+    }
   };
 
   const checkWinner = (fieldIndex) => {
@@ -312,11 +320,13 @@ const gameController = (() => {
   };
 
   const setTurn = () => {
-    if (getCurrentMark() === "circle") {
+    const currentMark = getCurrentMark();
+    if (currentMark === "circle") {
       sharedVariables.turnMessage.textContent = `O 's turn to play`;
     } else {
       sharedVariables.turnMessage.textContent = `X 's turn to play`;
     }
+    displayController.activeMarkHover(currentMark);
   };
 
   const getIsOver = () => {
@@ -325,6 +335,7 @@ const gameController = (() => {
 
   const reset = () => {
     move = 1;
+    round = 1;
     isOver = false;
     player1.score = 0;
     player2.score = 0;
@@ -332,6 +343,7 @@ const gameController = (() => {
 
   const restartRound = () => {
     move = 1;
+    round = 1;
     isOver = false;
   }
 

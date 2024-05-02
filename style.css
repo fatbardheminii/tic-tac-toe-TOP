@@ -37,6 +37,11 @@ h1 {
   margin-top: 1rem;
 }
 
+.round-num {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
 .player-data {
   width: 100%;
   height: auto;
@@ -262,11 +267,12 @@ label[name="mark"] {
   left: 0;
   right: 0;
   background-color: rgba(0, 0, 0, 0.85);
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   font-size: 4rem;
   flex-direction: column;
   color: #fff;
+  padding-bottom: 4rem;
 }
 
 .winner-section.show {
