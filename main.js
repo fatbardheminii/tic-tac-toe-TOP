@@ -164,15 +164,11 @@ const gameBoard = (() => {
   };
   return { setCell, getCell, reset };
 })();
+
 const displayController = (() => {
   sharedVariables.cells.forEach((cell) => {
     cell.addEventListener("click", handleCellClick);
   });
-
-  // if (gameController.computerPlaysFirst()) {
-  //   console.log('hey')
-  //   gameController.playMove(getComputerMove());
-  // }
 
   function handleCellClick(e) {
     const fieldIndex = e.target.dataset.index;
@@ -196,19 +192,13 @@ const displayController = (() => {
       gameController.getCurrentMark() === sharedData.givenMarkP2.plTwoMark &&
       !gameController.getIsOver()
     ) {
-      //  if (gameController.computerPlaysFirst()) {
-      //   //  console.log(`movess: ${gameController.getMove()}`);
-      //    console.log(`First move: ${computerMove}`);
-      //    gameController.playMove(computerMove);
-      //   //  console.log(gameController.playMove(computerMove));
-      //    activeMarkHover(gameController.getCurrentMark());
-      //  }
+      //BUG NOT FIXED!!!: If round is an even number and computer has to make first move
+      //                it isn't working!!
+       if (gameController.computerPlaysFirst()) {
+         gameController.playMove(computerMove);
+         activeMarkHover(gameController.getCurrentMark());
+       }
          // Otherwise, it's not the first move, get and play the computer's move
-         // const computerMove = getComputerMove();
-         console.log("Computer Turn");
-         console.log("Computer Move:", computerMove);
-         console.log(`Current mark: ${gameController.getCurrentMark()}`);
-        //  console.log(`move value: ${gameController.getMove()}`);
          activeMarkHover(gameController.getCurrentMark());
          return gameController.playMove(computerMove);
     }
@@ -280,13 +270,6 @@ const displayController = (() => {
     removeMarks();
     gameController.setTurn();
     sharedVariables.winnerSection.classList.toggle("show");
-    // gameController.getMove();
-    console.log(`move after next round: ${gameController.getMove()}`);
-    // console.log(`func cp plays first:${gameController.computerPlaysFirst()}`);
-    // console.log(`variable computerplaying: ${sharedVariables.computerPlaying}`);
-    // console.log(`current mark: ${gameController.getCurrentMark()}`);
-    // console.log(`computer mark: ${sharedData.givenMarkP2.plTwoMark}`);
-    // console.log(`is over variable: ${gameController.getIsOver()}`);
   };
   sharedVariables.nextRoundBtn.addEventListener("click", nextRound);
 
@@ -332,8 +315,6 @@ const gameController = (() => {
       isOver = true;
       round++;
       sharedVariables.roundNum.textContent = round;
-      console.log(`move:${move}`);
-      console.log(`Round: ${round}`);
       return;
     }
     if (move === 9) {
@@ -342,14 +323,11 @@ const gameController = (() => {
       isOver = true;
       round++;
       sharedVariables.roundNum.textContent = round;
-      console.log(`Round: ${round}`);
       return;
       // }, 1000);
     }
-    console.log(`move before increment: ${move}`)
     move++;
     setTurn();
-    console.log(`move after increment:${move}`);
   };
 
   const getCurrentMark = () => {
@@ -438,14 +416,13 @@ const gameController = (() => {
     checkWinner,
     restartRound,
     computerPlaysFirst,
-    getMove,
+    getMove
   };
 })();
 
-(function triggerComputerMove() {
+function triggerComputerMove() {
   if (gameController.computerPlaysFirst()) {
     const computerMove = displayController.getComputerMove();
     gameController.playMove(computerMove);
-    console.log('hiii');
   }
-})();
+};
